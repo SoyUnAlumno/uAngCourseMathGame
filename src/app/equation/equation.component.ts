@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MathValidators } from '../math-validators';
+import { delay, filter } from 'rxjs';
+
 @Component({
   selector: 'app-equation',
   templateUrl: './equation.component.html',
@@ -19,10 +21,12 @@ export class EquationComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.mathForm.statusChanges.subscribe((value) => {
-      if (value === 'INVALID') {
+    this.mathForm.statusChanges.pipe(
+      filter(value=> value ==='VALID'),delay(100)).subscribe(() => {
+     /* Removed param 'value' in subscribe and following code because of the use of filter from RxJs
+        if (value === 'INVALID') {
         return;
-      }
+      } */
       this.mathForm.patchValue({
         a: this.randomNumber(),
         b: this.randomNumber(),
