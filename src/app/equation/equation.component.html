@@ -1,1 +1,8 @@
-<p>equation works!</p>
+<form [formGroup]="mathForm">
+  <!-- Different ways of accessing value
+    {{ mathForm.controls['a'].value }}
+{{ mathForm.controls['a'] }}
+{{ mathForm.get('a') }} 
+  {{ mathForm.value.a }}  -->
+  {{ a }} +  {{ b }} = 
+</form>
