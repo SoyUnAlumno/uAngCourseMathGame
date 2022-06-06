@@ -14,7 +14,7 @@ export class EquationComponent implements OnInit {
       answer: new FormControl(''),
     },
     [
-     MathValidators.addition,
+     MathValidators.addition('answer', 'a', 'b'),
     ]
   );
 
