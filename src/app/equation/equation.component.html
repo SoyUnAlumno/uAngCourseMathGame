@@ -5,7 +5,7 @@
 {{ mathForm.get('a') }} 
   {{ mathForm.value.a }}  -->
   <div class="equation">{{ a }} + {{ b }} =</div>
-  <input formControlName="answer" />
+  <input appAnswerHighlight formControlName="answer" />
 </form>
 <div class="stats">
   {{ secsPerSolution | number: "1.1-3" }}
