@@ -13,14 +13,23 @@ export class EquationComponent implements OnInit {
       b: new FormControl(this.randomNumber()),
       answer: new FormControl(''),
     },
-    [
-     MathValidators.addition('answer', 'a', 'b'),
-    ]
+    [MathValidators.addition('answer', 'a', 'b')]
   );
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.mathForm.statusChanges.subscribe((value) => {
+      if (value === 'INVALID') {
+        return;
+      }
+      this.mathForm.patchValue({
+        a: this.randomNumber(),
+        b: this.randomNumber(),
+        answer: ''
+      })     
+    });
+  }
 
   randomNumber() {
     return Math.floor(Math.random() * 10);
