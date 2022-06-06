@@ -4,10 +4,12 @@
 {{ mathForm.controls['a'] }}
 {{ mathForm.get('a') }} 
   {{ mathForm.value.a }}  -->
-  {{ a }} +  {{ b }} =  <input formControlName="answer"/>
+  <div class="equation">{{ a }} + {{ b }} =</div>
+  <input formControlName="answer" />
 </form>
-
-{{ secsPerSolution | number: '1.1-3'}}
+<div class="stats">
+  {{ secsPerSolution | number: "1.1-3" }}
+</div>
 
 <hr />
 <div>Form is valid: {{ mathForm.valid }}</div>

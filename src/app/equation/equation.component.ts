@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MathValidators } from '../math-validators';
-import { delay, filter } from 'rxjs';
+import { delay, filter, scan } from 'rxjs';
 
 @Component({
   selector: 'app-equation',
@@ -9,7 +9,7 @@ import { delay, filter } from 'rxjs';
   styleUrls: ['./equation.component.css'],
 })
 export class EquationComponent implements OnInit {
-  secsPerSolution: number = 0; 
+  secsPerSolution: number = 0;
   mathForm = new FormGroup(
     {
       a: new FormControl(this.randomNumber()),
@@ -22,25 +22,33 @@ export class EquationComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    const startTime: Date = new Date();
-    let numberSolved: number = 0;
-
-    this.mathForm.statusChanges.pipe(
-      filter(value=> value ==='VALID'),delay(100)).subscribe(() => {
-        numberSolved++;
-    this.secsPerSolution = (
-      new Date().getTime() - startTime.getTime()) / numberSolved / 1000;
+    this.mathForm.statusChanges
+      .pipe(
+        filter((value) => value === 'VALID'),
+        delay(100),
+        scan(
+          (acc) => {
+            return {
+              numberSolved: acc.numberSolved + 1,
+              startTime: acc.startTime,
+            };
+          },
+          { numberSolved: 0, startTime: new Date() }
+        )
+      )
+      .subscribe(({ numberSolved, startTime }) => {
+        this.secsPerSolution =
+          (new Date().getTime() - startTime.getTime()) / numberSolved / 1000;
         /* Removed param 'value' in subscribe and following code because of the use of filter from RxJs
         if (value === 'INVALID') {
         return;
       } */
-    
-      this.mathForm.patchValue({
-        a: this.randomNumber(),
-        b: this.randomNumber(),
-        answer: ''
-      })     
-    });
+        this.mathForm.patchValue({
+          a: this.randomNumber(),
+          b: this.randomNumber(),
+          answer: '',
+        });
+      });
   }
 
   randomNumber() {
